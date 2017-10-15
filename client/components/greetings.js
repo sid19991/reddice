@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 import React from 'react';
-import Greetings from './greetings';
-class App extends React.Component{
-    render(){    
+class Greetings extends React.Component{
+    render(){
         return(
-                <Greetings/>
+                <h1>Hi!!!</h1>
                 )
     }
 }
-export default App;
+export default Greetings
+
