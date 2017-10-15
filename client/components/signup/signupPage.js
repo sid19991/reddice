@@ -4,14 +4,12 @@
  * and open the template in the editor.
  */
 import React from 'react';
-class Greetings extends React.Component{
+class SignUp extends React.Component{
     render(){
         return(
-                <div className="jumbotron">
-                <h1>Hi!</h1>
-        </div>        
-        )
+                <h1>Sign Up Page</h1>
+                )
     }
 }
-export default Greetings
+export default SignUp
 
