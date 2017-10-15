@@ -4,10 +4,16 @@
  * and open the template in the editor.
  */
 import React from 'react';
+import SignUpForm from './SignupForm';
 class SignUp extends React.Component{
     render(){
         return(
-                <h1>Sign Up Page</h1>
+                <div className="row">
+        <div className="col-md-4 col-md-offset-4">
+        <SignUpForm/>
+        </div>
+        </div>    
+                
                 )
     }
 }
