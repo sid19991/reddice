@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import {ADD_FLASH_MESSAGE} from './types';
+import {ADD_FLASH_MESSAGE,DELETE_FLASH_MESSAGE} from './types';
 export function addFlashMessage(message){
     return {
         type:ADD_FLASH_MESSAGE,
@@ -11,3 +11,9 @@ export function addFlashMessage(message){
     }
 }
 
+export function deleteFlashMessage(id){
+    return{
+        type:DELETE_FLASH_MESSAGE,
+        id
+    }
+}
