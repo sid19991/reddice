@@ -6,6 +6,8 @@
 import React from 'react'
 import {map} from 'lodash'
 import timezones from '../../data/timezones';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 class signupForm extends React.Component{
     constructor(props){
         super(props)
@@ -25,7 +27,8 @@ class signupForm extends React.Component{
     onSubmit(e){
         e.preventDefault();
         console.log(this.state);
-    }
+this.props.userSignupRequest(this.state);    
+}
     render(){
         const options = map(timezones,(val,key)=>
         <option key={val} value={val}>{key}</option>
@@ -63,6 +66,9 @@ class signupForm extends React.Component{
                 </form>
                 )
     }
+}
+signupForm.propTypes = {
+     userSignupRequest:PropTypes.func.isRequired
 }
 export default signupForm
 
