@@ -8,6 +8,7 @@ import {map} from 'lodash'
 import timezones from '../../data/timezones';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import classname from 'classnames';
 class signupForm extends React.Component{
     constructor(props){
         super(props)
@@ -16,7 +17,9 @@ class signupForm extends React.Component{
             email:"",
             password:"",
             passwordConfirmation:"",
-            timezone:""
+            timezone:"",
+            errors: "",
+            isLoading:false
         }
         this.onChange=this.onChange.bind(this)
         this.onSubmit=this.onSubmit.bind(this)
@@ -25,43 +28,57 @@ class signupForm extends React.Component{
         this.setState({[e.target.name]:e.target.value})
     }
     onSubmit(e){
+        this.setState({errors:{},isLoading:true});
         e.preventDefault();
         console.log(this.state);
-this.props.userSignupRequest(this.state);    
+        this.props.userSignupRequest(this.state).then(
+                ()=>{}
+                
+                ).catch((data)=>{
+                    this.setState({errors:data.response.data})
+//        console.log(data.response);
+        })
+        this.setState({isLoading:false});
 }
     render(){
+        const {errors} = this.state;
         const options = map(timezones,(val,key)=>
         <option key={val} value={val}>{key}</option>
         )
         return(
                 <form onSubmit={this.onSubmit}>
                 <h1>Join Our Community!</h1>
-                <div className="form-group">
+                <div className={classname("form-group",{'has-error':errors.username})}>
                     <label className="control-label">Username</label>
                     <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.onChange}/>
-                    </div>
-                    <div className="form-group">
+                    {errors.username && <span className="help-block">{errors.username}</span>}            
+        </div>
+                    <div className={classname("form-group",{'has-error':errors.email})}>
         <label className="control-label">Email</label>
                     <input type="text" className="form-control" name="email" value={this.state.email} onChange={this.onChange}/>
-                    </div>
-        <div className="form-group">            
+            {errors.email && <span className="help-block">{errors.email}</span>}                   
+            </div>
+        <div className={classname("form-group",{'has-error':errors.password})}>            
         <label className="control-label">Password</label>
                     <input type="password" className="form-control" name="password" value={this.state.password} onChange={this.onChange}/>
-        </div>            
-        <div className="form-group">
+        {errors.password && <span className="help-block">{errors.password}</span>}            
+                </div>            
+        <div className={classname("form-group",{'has-error':errors.passwordConfirmation})}>
         <label className="control-label">Confirm Password</label>
                     <input type="password" className="form-control" name="passwordConfirmation" value={this.state.passwordConfirmation} onChange={this.onChange}/>
+                    {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span>}            
                     </div>
-                    <div className="form-group">
+                    <div className={classname("form-group",{'has-error':errors.timezone})}>
         <label className="control-label">Timezone</label>
         <select className="form-control" name="timezone" value={this.state.timezone} onChange={this.onChange}>
             <option value="" disabled>Choose Your Timezone</option>
             {options}
                 </select>
+                {errors.timezone && <span className="help-block">{errors.timezone}</span>}
                             </div>                            
                 
                 <div className="form-group">
-                <button className="btn btn-primary btn-lg">Sign Up</button>
+                <button disabled={this.state.isLoading} className="btn btn-primary btn-lg">Sign Up</button>
                 </div>
                 </form>
                 )
