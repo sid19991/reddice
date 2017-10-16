@@ -48,7 +48,10 @@ class signupForm extends React.Component{
         ,isLoading:true});
         this.props.userSignupRequest(this.state).then(
                 ()=>{
-                    
+                    this.props.addFlashMessage({
+                        type:'success',
+                        text:'You have signed up successfully.Welcome'
+                    }) 
             c.setState({navigate:true});
                 }
                 
@@ -123,7 +126,8 @@ if(navigate){
     }
 }
 signupForm.propTypes = {
-     userSignupRequest:PropTypes.func.isRequired
+     userSignupRequest:PropTypes.func.isRequired,
+     addFlashMessage:PropTypes.func.isRequired
 }
 export default signupForm
 
