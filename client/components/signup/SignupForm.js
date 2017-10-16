@@ -8,6 +8,7 @@ import {map} from 'lodash'
 import timezones from '../../data/timezones';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import {Redirect} from 'react-router';
 import classname from 'classnames';
 import validateInput from '../../../server/shared/validations/signup';
 import TextFieldGroup from '../common/TextFieldGroup';
@@ -21,7 +22,8 @@ class signupForm extends React.Component{
             passwordConfirmation:"",
             timezone:"",
             errors: "",
-            isLoading:false
+            isLoading:false,
+            navigate:false
         }
         this.onChange=this.onChange.bind(this)
         this.onSubmit=this.onSubmit.bind(this)
@@ -39,16 +41,24 @@ class signupForm extends React.Component{
     onSubmit(e){
         
         e.preventDefault();
+        let c = this
         if(this.isValid())
         {
             this.setState({errors:{}
         ,isLoading:true});
         this.props.userSignupRequest(this.state).then(
-                ()=>{}
+                ()=>{
+                    
+            c.setState({navigate:true});
+                }
                 
                 ).catch((data)=>{
-                    this.setState({errors:data.response.data,isLoading:false})
-//        console.log(data.response);
+                    
+                        console.log(data);
+                            this.setState({errors:data.response.data
+                        ,isLoading:false})
+                        
+        
         })
     }
     
@@ -56,9 +66,13 @@ class signupForm extends React.Component{
 }
     render(){
         const {errors} = this.state;
+        const {navigate} = this.state
         const options = map(timezones,(val,key)=>
         <option key={val} value={val}>{key}</option>
         )
+if(navigate){
+    return <Redirect to="/" push={true}/>
+}
         return(
                 <form onSubmit={this.onSubmit}>
                 <h1>Join Our Community!</h1>
@@ -90,6 +104,7 @@ class signupForm extends React.Component{
         onChange={this.onChange}
         value={this.state.passwordConfirmation}
         field="passwordConfirmation"
+        type="password"
         />
                     <div className={classname("form-group",{'has-error':errors.timezone})}>
         <label className="control-label">Timezone</label>
