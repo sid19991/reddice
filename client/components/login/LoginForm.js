@@ -9,7 +9,7 @@ import validateInput from '../../../server/shared/validations/login';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router';
 import PropTypes from 'prop-types';
-import {login} from '../../actions/login';
+import {login} from '../../actions/authActions';
 class LoginForm extends React.Component{
     constructor(props){
         super(props)
@@ -40,7 +40,7 @@ class LoginForm extends React.Component{
             this.props.login(this.state).then(
                     (res)=>c.setState({navigate:true})
                     ).catch(function(err){
-                        console.log(err.response)
+                        console.log(err)
                         c.setState({errors:err.response.data.errors,isLoading:false})
                     });
         }
