@@ -57,8 +57,8 @@ class signupForm extends React.Component{
                 
                 ).catch((data)=>{
                     
-                        console.log(data);
-                            this.setState({errors:data.response.data
+                        console.log(data.response);
+                            this.setState({errors:data.response.data.errors
                         ,isLoading:false})
                         
         
