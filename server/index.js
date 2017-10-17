@@ -10,10 +10,12 @@ import webpackMiddleWare from 'webpack-dev-middleware';
 import webpackConfig from '../webpack.config.dev.js';
 import webpackHotMiddleWare from 'webpack-hot-middleware';
 import users from './routes/users';
+import auth from './routes/auth';
 import bodyParser from 'body-parser';
 let app = express();
 app.use(bodyParser.json());
 app.use('/api/users',users);
+app.use('/api/auth',auth)
 const compiler=webpack(webpackConfig);
 app.use(webpackMiddleWare(compiler,{
     hot:true,

@@ -33,13 +33,15 @@ class LoginForm extends React.Component{
     }
     onSubmit(e){
         e.preventDefault()
+        let c = this
         if(this.isValid()){
         console.log("onSubmit fired");
             this.setState({errors:{},isLoading:false})
             this.props.login(this.state).then(
-                    (res)=>this.setState({navigate:true})
+                    (res)=>c.setState({navigate:true})
                     ).catch(function(err){
-                        this.setState({errors:err.data.errors,isLoading:false})
+                        console.log(err.response)
+                        c.setState({errors:err.response.data.errors,isLoading:false})
                     });
         }
     }
@@ -54,7 +56,8 @@ class LoginForm extends React.Component{
         }
         return(
                 <form onSubmit={this.onSubmit}>
-                <h1>Login</h1>
+        {errors.form && <div className="alert alert-danger">{errors.form}</div>}        
+        <h1>Login</h1>
                 <TextFieldGroup
                 field="identifier"
                 label="Username/Email"
