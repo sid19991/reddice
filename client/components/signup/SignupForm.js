@@ -21,12 +21,14 @@ class signupForm extends React.Component{
             password:"",
             passwordConfirmation:"",
             timezone:"",
-            errors: "",
+            errors: {},
             isLoading:false,
-            navigate:false
+            navigate:false,
+            invalid:false
         }
         this.onChange=this.onChange.bind(this)
         this.onSubmit=this.onSubmit.bind(this)
+        this.checkUserExists = this.checkUserExists.bind(this)
     }
     onChange(e){
         this.setState({[e.target.name]:e.target.value})
@@ -67,6 +69,25 @@ class signupForm extends React.Component{
     
         
 }
+checkUserExists(e){
+    const field = e.target.name;
+    const val = e.target.value;
+    if(val!==''){
+        this.props.isUserExists(val).then(res=>{
+            let errors = this.state.errors;
+            let invalid;
+                if(res.data.user){
+                errors[field] = "There is user with such "+field;
+            invalid=true;
+                }
+            else{
+                errors[field]=''
+                invalid=false
+            }
+            this.setState({errors,invalid});
+        })
+    }
+}
     render(){
         const {errors} = this.state;
         const {navigate} = this.state
@@ -82,6 +103,7 @@ if(navigate){
                 <TextFieldGroup
         error={errors.username}
         label="Username"
+        checkUserExists={this.checkUserExists}
         onChange={this.onChange}
         value={this.state.username}
         field="username"
@@ -89,6 +111,7 @@ if(navigate){
                 <TextFieldGroup
         error={errors.email}
         label="Email"
+        checkUserExists={this.checkUserExists}
         onChange={this.onChange}
         value={this.state.email}
         field="email"
@@ -119,7 +142,7 @@ if(navigate){
                             </div>                            
                 
                 <div className="form-group">
-                <button disabled={this.state.isLoading} className="btn btn-primary btn-lg">Sign Up</button>
+                <button disabled={this.state.isLoading || this.state.invalid} className="btn btn-primary btn-lg">Sign Up</button>
                 </div>
                 </form>
                 )
@@ -127,7 +150,8 @@ if(navigate){
 }
 signupForm.propTypes = {
      userSignupRequest:PropTypes.func.isRequired,
-     addFlashMessage:PropTypes.func.isRequired
+     addFlashMessage:PropTypes.func.isRequired,
+     isUserExists:PropTypes.func.isRequired
 }
 export default signupForm
 
